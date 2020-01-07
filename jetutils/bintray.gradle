@@ -78,9 +78,9 @@ install {
             inceptionYear '2020'
 
             packaging 'aar'
-//            groupId PROJ_GROUP
-//            artifactId PROJ_ARTIFACTID
-//            version PROJ_VERSION
+            groupId 'AndroidJeter'
+            artifactId 'jetutils'
+            version "3.0.0"
 
             licenses {
                 license {
