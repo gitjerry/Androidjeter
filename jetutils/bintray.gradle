@@ -2,35 +2,106 @@
 apply plugin: 'com.github.dcendents.android-maven'
 //Gradle Bintray Plugin
 apply plugin: 'com.jfrog.bintray'
-
+def siteUrl = 'https://github.com/gitjerry/Androidjeter'   // 项目的主页
+def gitUrl = 'https://github.com/gitjerry/Androidjeter.git'   // Git仓库的url
 bintray {
+//    user = properties.getProperty("bintray.user")
+//    key = properties.getProperty("bintray.apikey")
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
-
-//    Properties properties = new Properties()
-//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//    user = properties.getProperty('BINTRAY_USER')
-//    key = properties.getProperty('BINTRAY_KEY')
     configurations = ['archives']
 
     dryRun = false
     publish = true
 
     pkg {
-        repo = 'MyLibrary'
-        name = PROJ_NAME
+        repo = 'maven'
+        name = "JetUtils"
         licenses = ['Apache-2.0']
-        vcsUrl = PROJ_VCSURL
-        websiteUrl = PROJ_WEBSITEURL
-        issueTrackerUrl = PROJ_ISSUETRACKERURL
+        vcsUrl = gitUrl
+        websiteUrl = siteUrl
+//        issueTrackerUrl = PROJ_ISSUETRACKERURL
         publicDownloadNumbers = true
         version {
-            name = PROJ_VERSION
-            desc = PROJ_DESCRIPTION
-            vcsTag = PROJ_VERSION
+            //必须项
+            name = "2.0.0"
+            desc = "this is my util"
+            vcsTag = "T2.0.0"
 
             gpg {
                 sign = true
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += configurations.compile
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+        links "https://androiddoc.qiniudn.com/reference/"
+        title "jet ben"
+    }
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            // Add your description here
+            name "android jet util"
+            description "this is ben's util"
+            url siteUrl
+            inceptionYear '2020'
+
+            packaging 'aar'
+//            groupId PROJ_GROUP
+//            artifactId PROJ_ARTIFACTID
+//            version PROJ_VERSION
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                //
+                connection gitUrl
+                url siteUrl
+
+            }
+            developers {
+                developer {
+                    //填写bintray或者github的用户名
+                    id 'gitjerry'
+                    name 'ben'
+                    email '10086@gmail.com'
+                }
             }
         }
     }
