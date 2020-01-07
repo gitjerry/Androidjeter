@@ -27,9 +27,9 @@ bintray {
         publicDownloadNumbers = true
         version {
             //必须项
-            name = "2.0.0"
+            name = "230.0"
             desc = "this is my util"
-            vcsTag = "T2.0.0"
+            vcsTag = "T3.0.0"
 
             gpg {
                 sign = true
