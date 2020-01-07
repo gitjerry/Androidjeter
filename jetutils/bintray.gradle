@@ -1,0 +1,37 @@
+//Gradle Android Maven plugin
+apply plugin: 'com.github.dcendents.android-maven'
+//Gradle Bintray Plugin
+apply plugin: 'com.jfrog.bintray'
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+//    Properties properties = new Properties()
+//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//    user = properties.getProperty('BINTRAY_USER')
+//    key = properties.getProperty('BINTRAY_KEY')
+    configurations = ['archives']
+
+    dryRun = false
+    publish = true
+
+    pkg {
+        repo = 'MyLibrary'
+        name = PROJ_NAME
+        licenses = ['Apache-2.0']
+        vcsUrl = PROJ_VCSURL
+        websiteUrl = PROJ_WEBSITEURL
+        issueTrackerUrl = PROJ_ISSUETRACKERURL
+        publicDownloadNumbers = true
+        version {
+            name = PROJ_VERSION
+            desc = PROJ_DESCRIPTION
+            vcsTag = PROJ_VERSION
+
+            gpg {
+                sign = true
+            }
+        }
+    }
+}
